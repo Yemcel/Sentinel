@@ -1,0 +1,4 @@
+# Copy to .dev.vars for local testing only (never commit .dev.vars).
+DEV=true
+ADMIN_EMAIL=you@example.com
+INGEST_TOKENS=test-app:local-test-token-0123456789abcdefghijklmnop

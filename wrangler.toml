@@ -1,0 +1,31 @@
+# Sentinel — security and uptime monitor for Opeyemi's projects.
+# Runs on Cloudflare Workers (free plan). See README.md for setup.
+
+name = "sentinel"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+preview_urls = false
+
+# One schedule, every 5 minutes. src/scheduler.js decides which checks run on
+# each tick (uptime every tick; DNS hourly; certificates, domains and the
+# daily report once a day), spreading the work so no single run is heavy.
+[triggers]
+crons = ["*/5 * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "sentinel"
+# Replace with the id printed by `npx wrangler d1 create sentinel`
+database_id = "dfd440b2-2751-4a4b-a835-7a5cf348bca9"
+migrations_dir = "migrations"
+
+[observability]
+enabled = true
+
+# Secrets (set with `npx wrangler secret put NAME`, never written here):
+#   ADMIN_EMAIL     — the only address that can sign in, and where alerts go
+#   RESEND_API_KEY  — Resend key with Sending access for prudencewallet.com
+#   INGEST_TOKENS   — "prudence-wallet:<token>,listithub:<token>,…"
+[vars]
+ALERT_FROM = "Sentinel <sentinel@prudencewallet.com>"
